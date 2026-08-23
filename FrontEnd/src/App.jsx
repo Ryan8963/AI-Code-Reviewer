@@ -47,8 +47,6 @@ function handleKeyDown(e) {
       const newIndent = indent + '  ' // 2-space indent, adjust as you like
       const newValue = value.slice(0, start) + '\n' + newIndent + value.slice(start)
       setCode(newValue)
-
-      // move cursor to correct position after React re-renders
       requestAnimationFrame(() => {
         textarea.selectionStart = textarea.selectionEnd = start + 1 + newIndent.length
       })
@@ -68,7 +66,7 @@ function handleKeyDown(e) {
   async function reviewCode() {
     setLoading(true)
     try {
-      const response = await axios.post('https://ai-code-reviewer-backend-mjgv.onrender.com/ai/get-review', { code, language })
+      const response = await axios.post('https://ai-code-reviewer-backend-v1.onrender.com', { code, language })
       setReview(response.data)
     } catch (error) {
       setReview("Something went wrong while generating the review. Please try again.")
