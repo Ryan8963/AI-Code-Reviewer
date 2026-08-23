@@ -1,0 +1,186 @@
+*{
+  margin:0%;
+  padding:0%;
+  box-sizing:border-box;
+}
+html,
+body,
+#root{
+  height:100%;
+  width:100%;
+}
+main{
+  height:100%;
+  width:100%;
+  padding: 2.5rem;
+  display: flex;
+  gap:1rem;
+}
+.left, .right {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex-basis: 50%;
+  padding: 1.5rem;
+}
+
+.code {
+  flex: 1;
+  overflow: auto;
+  min-height: 0;
+}
+.left{
+  background-color: black;
+  position: relative;
+  min-height: 0;
+}
+.left .review{
+  position: absolute;
+  bottom:1rem;
+  right:1rem;
+  background-color: rgb(218, 218, 253);
+  color:black;
+  padding: 0.5rem 2rem;
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 0.75rem;
+}
+.left .review {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background-color: rgb(219, 219, 255);
+  color: #000000;
+  padding: 0.5rem 2rem;
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 0.7rem;
+}
+
+
+.right {
+  height: 100%;
+  flex-basis: 50%;
+  padding: 2rem;
+  overflow-y: auto;
+  text-align: left;
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #e0e0e0;
+}
+
+.right h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+  border-bottom: 1px solid #333;
+  padding-bottom: 0.3rem;
+}
+
+.right h3:first-child {
+  margin-top: 0;
+}
+
+.right p {
+  margin-bottom: 0.75rem;
+}
+
+.right ul, .right ol {
+  margin-bottom: 0.75rem;
+  padding-left: 1.5rem;
+}
+
+.right li {
+  margin-bottom: 0.4rem;
+}
+
+.right strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.right code {
+  background-color: #2a2a2a;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-family: "Fira Code", "Fira Mono", monospace;
+  font-size: 0.9em;
+  color: #f8f8f2;
+}
+
+.right pre {
+  background-color: #1a1a1a;
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 0.75rem 0;
+}
+
+.right pre code {
+  background-color: transparent;
+  padding: 0;
+}
+.review-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.review {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-top-color: #000;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.panel-header {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #333;
+}
+.code textarea:focus,
+.code pre:focus {
+  outline: none;
+}
+.right pre {
+  background-color: #1a1a1a;
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  overflow-y: visible;
+  max-height: none;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0.75rem 0;
+}
+.language-select {
+  background-color: #1a1a1a;
+  color: #fff;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}

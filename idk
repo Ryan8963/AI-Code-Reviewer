@@ -1,0 +1,68 @@
+Hello! Thanks for sharing your code.
+
+As a code reviewer, I noticed a couple of issues with the current implementation that could lead to bugs or runtime
+errors. Let's break down the problems and look at how we can make your code **correct**, **clean**, and **flexible**.
+
+---
+
+### 🚨 Problems Identified
+
+1. **`ReferenceError` / Scope Leak:** The variables `a` and `b` are not defined inside the function or passed as
+parameters. Unless `a` and `b` are declared globally (which is a bad practice), calling `sum()` will throw a
+`ReferenceError: a is not defined`.
+2. **Hard to Reuse:** A function should ideally be self-contained and accept inputs dynamically rather than relying on
+external variables.
+
+---
+
+### 💡 Solutions & Improvements
+
+#### 1. The Basic Fix (Add Parameters)
+If you just need to add two numbers, explicitly pass `a` and `b` as parameters:
+
+```javascript
+function sum(a, b) {
+return a + b;
+}
+
+// Usage:
+console.log(sum(5, 10)); // Output: 15
+```
+
+---
+
+#### 2. Modern & Concise Solution (ES6 Arrow Function)
+For simple one-liner functions, ES6 arrow functions make your code much cleaner and more readable:
+
+```javascript
+const sum = (a, b) => a + b;
+
+// Usage:
+console.log(sum(5, 10)); // Output: 15
+```
+
+---
+
+#### 3. The Best / Scalable Solution (Sum Any Number of Arguments)
+What if you want to sum 3, 4, or 100 numbers in the future? Using ES6 **Rest Parameters (`...`)** and
+`Array.prototype.reduce()`, you can make your `sum` function sum *any* quantity of numbers:
+
+```javascript
+// Accepts any amount of numbers
+const sum = (...numbers) => numbers.reduce((total, current) => total + current, 0);
+
+// Usage:
+console.log(sum(5, 10)); // Output: 15
+console.log(sum(1, 2, 3, 4)); // Output: 10
+console.log(sum()); // Output: 0 (Handles empty call safely)
+```
+
+---
+
+### 🌟 Recommendation
+
+* Go with **Solution 2** if you only ever need to add **two numbers**.
+* Go with **Solution 3** if you want a **robust, future-proof utility function** that handles multiple numbers
+seamlessly.
+
+Let me know if you have any questions or if you're targeting a specific environment/framework!
