@@ -7,6 +7,7 @@ if (!apiKey) {
 }
 
 const genAI = new GoogleGenerativeAI(apiKey);
+
 const model = genAI.getGenerativeModel({
   model: "gemini-3.7-flash",
   systemInstruction: `You are an expert AI code reviewer integrated into a developer tool.
@@ -216,8 +217,43 @@ The goal is to find the problems that actually matter and help the developer pro
 
 async function generateContent(language, code) {
   const prompt = `Language: ${language}\n\nCode:\n${code}`;
-  const result = await model.generateContent(prompt);
-  return result.response.text();
+
+  const maxRetries = 3;
+
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const result = await model.generateContent(prompt);
+
+      return result.response.text();
+
+    } catch (error) {
+      console.error(
+        `Gemini request failed (attempt ${attempt}/${maxRetries}):`,
+        error.message
+      );
+
+      // Only retry temporary/server-side errors
+      const isRetryable =
+        error.message?.includes("503") ||
+        error.message?.includes("Service Unavailable") ||
+        error.message?.includes("429") ||
+        error.message?.includes("Too Many Requests");
+
+      if (!isRetryable || attempt === maxRetries) {
+        throw error;
+      }
+
+      // Exponential backoff:
+      // attempt 1 → 1 second
+      // attempt 2 → 2 seconds
+      // attempt 3 → 4 seconds
+      const delay = 1000 * Math.pow(2, attempt - 1);
+
+      console.log(`Retrying Gemini request in ${delay}ms...`);
+
+      await new Promise((resolve) => setTimeout(resolve, delay));
+    }
+  }
 }
 
 module.exports = generateContent;
