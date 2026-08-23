@@ -66,7 +66,7 @@ function handleKeyDown(e) {
   async function reviewCode() {
     setLoading(true)
     try {
-      const response = await axios.post('https://ai-code-reviewer-backend-v1.onrender.com', { code, language })
+      const response = await axios.post('https://ai-code-reviewer-backend-v1.onrender.com/ai/get-review', { code, language })
       setReview(response.data)
     } catch (error) {
       setReview("Something went wrong while generating the review. Please try again.")
