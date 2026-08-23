@@ -8,7 +8,7 @@ if (!apiKey) {
 
 const genAI = new GoogleGenerativeAI(apiKey);
 const model = genAI.getGenerativeModel({
-  model: "gemini-3.6-flash",
+  model: "gemini-3.5-flash",
   systemInstruction: `You are an expert code reviewer with deep knowledge of software engineering best practices, clean code principles, and modern development standards across multiple languages and frameworks.
 
 Your job is to review the code you're given and return clear, actionable feedback.
