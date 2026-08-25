@@ -1,16 +1,16 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const OpenAI = require("openai");
 
-const apiKey = process.env.GOOGLE_GEMINI_KEY;
+const apiKey = process.env.GROQ_API_KEY;
 
 if (!apiKey) {
-  throw new Error("GOOGLE_GEMINI_KEY is not configured");
+  throw new Error("GROQ_API_KEY is not configured");
 }
 
-const genAI = new GoogleGenerativeAI(apiKey);
-
-const model = genAI.getGenerativeModel({
-  model: "gemini-3.7-flash",
-  systemInstruction: `You are an expert AI code reviewer integrated into a developer tool.
+const client = new OpenAI({
+  apiKey,
+  baseURL: "https://api.groq.com/openai/v1",
+});
+const systemInstruction= `You are an expert AI code reviewer integrated into a developer tool.
 
 Your job is to analyze the user's submitted code and provide a precise, practical, and structured code review. Your review should help the developer understand what is wrong, why it matters, and how to improve it.
 
@@ -212,47 +212,20 @@ Be accurate, constructive, specific, and honest.
 The goal is not to find the maximum number of problems.
 
 The goal is to find the problems that actually matter and help the developer produce better code.
-`,
-});
-
+`
 async function generateContent(language, code) {
-  const prompt = `Language: ${language}\n\nCode:\n${code}`;
-
-  const maxRetries = 3;
-
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    try {
-      const result = await model.generateContent(prompt);
-
-      return result.response.text();
-
-    } catch (error) {
-      console.error(
-        `Gemini request failed (attempt ${attempt}/${maxRetries}):`,
-        error.message
-      );
-
-      // Only retry temporary/server-side errors
-      const isRetryable =
-        error.message?.includes("503") ||
-        error.message?.includes("Service Unavailable") ||
-        error.message?.includes("429") ||
-        error.message?.includes("Too Many Requests");
-
-      if (!isRetryable || attempt === maxRetries) {
-        throw error;
-      }
-
-      // Exponential backoff:
-      // attempt 1 → 1 second
-      // attempt 2 → 2 seconds
-      // attempt 3 → 4 seconds
-      const delay = 1000 * Math.pow(2, attempt - 1);
-
-      console.log(`Retrying Gemini request in ${delay}ms...`);
-
-      await new Promise((resolve) => setTimeout(resolve, delay));
-    }
+  try {
+    const response = await client.chat.completions.create({
+  model: "openai/gpt-oss-120b",
+  messages: [
+    { role: "system", content: systemInstruction },
+    { role: "user", content: `Language: ${language}\n\nCode:\n${code}` }
+  ],
+});
+    return response.choices[0].message.content;
+  } catch (error) {
+    console.error("Groq API error:", error.message);
+    throw new Error(error.message || "Groq API request failed");
   }
 }
 
